@@ -93,7 +93,7 @@ def database_table_to_excel(table_name, file_path):
     database_to_excel(table_name, file_path)
 
 
-#指定表接口入数据库
+#指定表接口写入数据库
 interface_excel_to_database(r"C:\Users\Administrator\Desktop\interface_xh.xls")
 process_excel_to_database(r"C:\Users\Administrator\Desktop\interface_xh.xls")
 
