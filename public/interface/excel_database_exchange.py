@@ -1,7 +1,7 @@
 from public.xlrd_handle import xlrd_handle
 from public.common.sql_exc import sql_exc
 
-def interface_excel_to_database(file_path = r"C:\Users\Administrator\Desktop\interface.xls", sheet_name = '接口基础数据'):
+def interface_excel_to_database(file_path, sheet_name = '接口基础数据'):
     '''将excel里sheet页为interface_base_data的内容写入数据库interface_base_data表中'''
     xh = xlrd_handle()
     xh.set_file_path(file_path)
@@ -18,7 +18,7 @@ def interface_excel_to_database(file_path = r"C:\Users\Administrator\Desktop\int
             sql_exc(sql)
 
 
-def process_excel_to_database(file_path = r"C:\Users\Administrator\Desktop\interface.xls", sheet_name = '流程记录'):
+def process_excel_to_database(file_path, sheet_name = '流程记录'):
     '''将excel里sheet页为process_record的内容写入数据库process_record表中'''
     xh = xlrd_handle()
     xh.set_file_path(file_path)
@@ -83,7 +83,7 @@ def database_to_excel(table_name, file_path):
 
 
 
-def database_table_to_excel(table_name, file_path = r"F:\test\write.xls"):
+def database_table_to_excel(table_name, file_path):
     '''
     数据库指定表字段名和数据写入excel
     :param table_name:  表名
@@ -93,5 +93,10 @@ def database_table_to_excel(table_name, file_path = r"F:\test\write.xls"):
     database_to_excel(table_name, file_path)
 
 
-interface_excel_to_database()
-process_excel_to_database()
+#指定表接口入数据库
+interface_excel_to_database(r"C:\Users\Administrator\Desktop\interface_xh.xls")
+process_excel_to_database(r"C:\Users\Administrator\Desktop\interface_xh.xls")
+
+#数据库数据写入excel
+#database_table_to_excel(r"F:\test\write.xls")
+

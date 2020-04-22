@@ -12,15 +12,18 @@ def str_to_json(result_str):
 
     RST = ''
     try:
-        RST = json.loads(result_str)
-    except:
+        RST = json.loads(result_str.strip())
+    except Exception as e1:
         try:
             #处理可能包含在()内的json字符串
-            temp_str = result_str.split('(')[1].split(')')[0]
+            temp_str = "{" + result_str.strip().split('({')[1].split('})')[0] + "}"
             RST = json.loads(temp_str)
-        except:
-            logging.error("字符串处理Json失败: " + str(result_str))
-            return False
+        except Exception as e2:
+            try:
+                RST = eval(result_str)
+            except Exception as e3:
+                logging.error("字符串处理Json失败: " + str(result_str) + "\nError1：" + str(e1) + "\nError2：" + str(e2) + "\nError3：" + str(e3))
+                return False
         
     return RST
 

@@ -50,6 +50,7 @@ class requests_handle():
                 self.return_data['status'] = True
                 self.return_data['response_data'] = self.result.text
                 self.return_data['status_code'] = self.result.status_code
+                self.return_data['elapsed_time'] = self.result.elapsed.total_seconds()
                 return self.return_data
             except requests.RequestException as e:
                 logging.error('request请求接口失败\n\t请求方法为:\t' + str(self.method) + '\n\t请求URL为:\t' + str(self.url) + '\n\t异常信息为:\t' + str(e))
@@ -58,7 +59,7 @@ class requests_handle():
                 return self.return_data
         elif self.method.lower() == 'post':
             try:
-                logging.error('request请求接口\n\t请求方法为:\t' + str(self.method) + '\n\t请求URL为:\t' + str(self.url) + '\n\t请求Body为:\t' + str(self.body) + '\n\t请求Headers为:\t' + str(self.headers))
+                logging.info('request请求接口\n\t请求方法为:\t' + str(self.method) + '\n\t请求URL为:\t' + str(self.url) + '\n\t请求Body为:\t' + str(self.body) + '\n\t请求Headers为:\t' + str(self.headers))
                 self.result = requests.post(self.url, data = self.body, headers = self.headers, verify = self.verify)
                 self.return_data['status'] = True
                 self.return_data['response_data'] = self.result.text
