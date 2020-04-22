@@ -1,7 +1,7 @@
 from config.config import database_config
 from public.mysql_handle import mysql_handle
 
-def sql_exc(sql,net_name = 'gxs_lan',database = 'gxs_test'):
+def sql_exc(sql,net_name = 'localhost',database = 'gxs_test'):
     '''
     sql执行
     :param net_name: config中配置的数据库连接数据

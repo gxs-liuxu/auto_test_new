@@ -192,7 +192,7 @@ class interface_test():
         self.log_data['response_status'] = ''
         self.log_data['status_code'] = ''
         self.log_data['check_result'] = ''
-        self.log_data['check_status'] = ''
+        self.log_data['check_status'] = 0
         self.log_data['remark'] = ''
 
         if self.interface_data['second_module']:
@@ -218,8 +218,8 @@ class interface_test():
         rh = requests_handle(self.interface_data['method'], self.interface_data['url'], self.interface_data['body'],headers)
         begin_time = get_time_stamp()
         self.rq_result = rh.exc_requests()
-        end_time = get_time_stamp()
-        use_time = time_dif(begin_time, end_time)
+        #end_time = get_time_stamp()
+        #use_time = time_dif(begin_time, end_time)
 
         self.log_data['exc_time'] = str(begin_time)
         self.log_data['response_time'] = ''
@@ -228,10 +228,8 @@ class interface_test():
         if self.rq_result['status']:
             self.log_data['response_data'] = self.rq_result['response_data']
             self.log_data['status_code'] = self.rq_result['status_code']
-            try:
-                self.log_data['response_time'] = self.rq_result['elapsed_time']
-            except:
-                self.log_data['response_time'] = use_time
+            self.log_data['response_time'] = self.rq_result['elapsed_time']
+
 
             #断言判断
             #print(self.log_data)
@@ -245,9 +243,11 @@ class interface_test():
             self.log_data['remark'] = self.rq_result['exception']
 
     @staticmethod
-    def single_quotation_to_double(sq_str):
+    def set_escape_character(sq_str):
         if "'" in sq_str:
             return "\\\'".join(sq_str.split("'"))
+        if '"' in sq_str:
+            return "\\\"".join(sq_str.split('"'))
         else:
             return sq_str
 
@@ -262,7 +262,7 @@ class interface_test():
 
         sql = "INSERT INTO interface_exc_log (interface_tag,`module`,method,url,headers,body,exc_time,response_time,status_code,response_data,is_check,checkpoint,check_result,check_status,remark,project,report_record) VALUES (\'" + \
               self.log_data['interface_tag'] + "\',\'"+ self.log_data['module'] + "\',\'"+ self.log_data['method'] + "\',\'"+ self.log_data['url'] + "\',\'"+ self.log_data['headers'] + "\',\'" \
-               + str(self.log_data['body']) + "\',\'"+ str(self.log_data['exc_time']) + "\',\'"+ str(self.log_data['response_time']) + "\',\'"+ str(self.log_data['status_code']) + "\',\'"+ str(interface_test.single_quotation_to_double(self.log_data['response_data'])) + "\',\'" \
+               + str(self.log_data['body']) + "\',\'"+ str(self.log_data['exc_time']) + "\',\'"+ str(self.log_data['response_time']) + "\',\'"+ str(self.log_data['status_code']) + "\',\'"+ str(interface_test.set_escape_character(self.log_data['response_data'])) + "\',\'" \
                + str(self.log_data['is_check']) + "\',\'"+ str(self.log_data['checkpoint']) + "\',\""+ str(self.log_data['check_result']) + "\",\""+ str(self.log_data['check_status']) + "\",\""+ str(self.log_data['remark']) + "\",\'" \
               + str(self.log_data['project']) + "\',\'"+ str(self.log_data['report_record']) + "\')"
 
