@@ -1,5 +1,4 @@
 from public.interface.process_class import process_class
-from public.common.common import str_to_json
 
 def main():
     a = process_class()
@@ -7,7 +6,7 @@ def main():
     #a.set_test_project("股先生APP")
     a.set_test_task("日常巡检")
     a.run()
-    print("master")
+    print("dev")
 
 
 if __name__ == '__main__':
