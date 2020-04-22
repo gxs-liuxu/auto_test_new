@@ -6,7 +6,7 @@ def main():
     #a.set_test_project("股先生APP")
     a.set_test_task("日常巡检")
     a.run()
-    print("dev")
+    print("master")
 
 
 if __name__ == '__main__':
