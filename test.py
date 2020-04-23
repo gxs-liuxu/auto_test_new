@@ -12,5 +12,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+    print('hhh')
     print('1本地代码提交代码到xjdev')
     print('2本地代码提交代码到xjdev')
