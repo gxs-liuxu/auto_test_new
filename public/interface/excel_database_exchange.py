@@ -94,8 +94,8 @@ def database_table_to_excel(table_name, file_path):
 
 
 #指定表接口入数据库
-interface_excel_to_database(r"C:\Users\Administrator\Desktop\interface_xh.xls")
-process_excel_to_database(r"C:\Users\Administrator\Desktop\interface_xh.xls")
+interface_excel_to_database(r"C:\Users\Administrator\Desktop\interface.xls")
+process_excel_to_database(r"C:\Users\Administrator\Desktop\interface.xls")
 
 #数据库数据写入excel
 #database_table_to_excel(r"F:\test\write.xls")
