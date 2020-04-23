@@ -278,7 +278,7 @@ class process_class():
         sql = "INSERT INTO process_exc_log (project,task,process_tag,scene,process_status,is_exc,interface_tag,interface_exc_success_num,interface_exc_fail_num,interface_exc_time,exc_status,jump_process_tag,report_record,remark) VALUES (\'" + \
               self.process_log_data['project'] + "\',\'"+ self.process_log_data['task'] + "\',\'"+ self.process_log_data['process_tag'] + "\',\'"+ self.process_log_data['scene'] + "\',\'"+ str(self.process_log_data['process_status']) + "\',\'" \
                + str(self.process_log_data['is_exc']) + "\',\'"+ str(self.process_log_data['interface_tag']) + "\',\'"+ str(self.process_log_data['interface_exc_success_num']) + "\',\'"+ str(self.process_log_data['interface_exc_fail_num']) + "\',\'"+ str(self.process_log_data['interface_exc_time']) + "\',\'"+ str(self.process_log_data['exc_status']) + "\',\'"+ str(self.process_log_data['jump_process_tag']) + "\',\'"\
-              + str(self.process_log_data['report_record']) + "\',\'" + str(self.process_log_data['remark']) + "\')"
+              + str(self.process_log_data['report_record']) + "\',\"" + str(interface_test.set_escape_character(self.process_log_data['remark'])) + "\")"
 
         sql_exc(sql)
 
@@ -293,7 +293,7 @@ class process_class():
 
         sql = "INSERT INTO process_base_log (report_record,project,task,process_list,create_time,process_begin_time,process_end_time,message) VALUES (\'" + \
               self.process_base_log['report_record'] + "\',\'"+ self.process_base_log['project'] + "\',\'"+ self.process_base_log['task'] + "\',\""+ str(interface_test.set_escape_character(self.process_base_log['process_list'])) + "\",\'"+ str(self.process_base_log['create_time']) + "\',\'" \
-               + str(self.process_base_log['process_begin_time']) + "\',\'"+ str(self.process_base_log['process_end_time']) + "\',\'"+ str(self.process_base_log['message']) + "\')"
+               + str(self.process_base_log['process_begin_time']) + "\',\'"+ str(self.process_base_log['process_end_time']) + "\',\""+ str(interface_test.set_escape_character(self.process_base_log['message'])) + "\")"
 
         sql_exc(sql)
 
@@ -349,8 +349,8 @@ class process_class():
         #预处理process_base_log日志
         self.set_process_base_log()
 
-        #判断流程列表格式，必须是list
-        if type(self.process_list) is not list:
+        #判断流程列表格式，必须是list,tuple
+        if type(self.process_list) not in (list,tuple):
             self.process_base_log['process_end_time'] = get_time_stamp()
             self.process_base_log['create_time'] = get_time_stamp()
             self.process_base_log['message'] = 'Error! 流程设置的数据类型应为list, 流程为： ' + str(self.process_list) + '; 数据类型为： ' +'\\\''.join(str(type(self.process_list)).split('\''))
