@@ -1,9 +1,9 @@
 database_config = {
     'localhost': {
-        'host': '192.168.0.96',
+        'host': '127.0.0.1',
         'port': 3306,
         'user': 'root',
-        'password': '123456'
+        'password': ''
     },
     'gxs_lan' : {
         'host' : '192.168.10.75',

@@ -1,5 +1,6 @@
 from public.interface.process_class import process_class
 from public.interface.excel_database_exchange import to_database
+from public.opReport import opExcel
 
 
 def main():
@@ -9,6 +10,9 @@ def main():
     a.set_test_task("日常巡检")
     #a.set_global_dict({"username":"15921757467","password":""})
     a.run()
+    report = opExcel()
+    report.GenCondition(report.worksheet,project_name="股先生",version="3.0.0",env="内网")
+    report.workbook.close()
 
 
 if __name__ == '__main__':

@@ -157,7 +157,7 @@ class opExcel(object):
         plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
         #plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
         plt.bar(range(len(y)),y,color='rgb',tick_label = x)
-        plt.savefig('./public/report/响应时间图/%srTime.jpg'%time.strftime('%Y-%m-%d %H-%M-%S'))
+        plt.savefig('./public/report/rtime/%srTime.jpg'%time.strftime('%Y-%m-%d %H-%M-%S'))
         #plt.show()
 
 
