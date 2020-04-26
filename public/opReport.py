@@ -6,6 +6,7 @@ import time
 from public.common.sql_exc import sql_exc
 import matplotlib.pyplot as plt
 import warnings
+from config.setting import *
 
 warnings.filterwarnings('ignore')
 
@@ -13,7 +14,7 @@ class opExcel(object):
     def __init__(self):
         self.time1 = str(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
         try:
-            self.workbook = xlsxwriter.Workbook('./public/report/testReport%s.xlsx'%time.strftime('%Y-%m-%d %H-%M-%S'))  # 新建Excel
+            self.workbook = xlsxwriter.Workbook(REPORT_PATH)  # 新建Excel
             self.worksheet = self.workbook.add_worksheet("测试总况")  # 传入sheet名称
             #self.worksheet2 = self.workbook.add_worksheet("响应时间分布")
         except Ellipsis as e:
