@@ -10,8 +10,11 @@ def main():
     a.set_test_task("日常巡检")
     #a.set_global_dict({"username":"15921757467","password":""})
     a.run()
+
+    #生成报告
     report = opExcel()
     report.GenCondition(report.worksheet,project_name="股先生",version="3.0.0",env="内网")
+    report.AbInformation(report.worksheet2)
     report.workbook.close()
 
 

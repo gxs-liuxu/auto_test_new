@@ -2,7 +2,6 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 import xlsxwriter
-import time
 from public.common.sql_exc import sql_exc
 import matplotlib.pyplot as plt
 import warnings
@@ -13,10 +12,12 @@ warnings.filterwarnings('ignore')
 class opExcel(object):
     def __init__(self):
         self.time1 = str(time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time())))
+        self.num = sql_exc("SELECT COUNT(*) FROM interface_exc_log WHERE report_record = (SELECT report_record FROM interface_exc_log ORDER BY id DESC LIMIT 1)")
+
         try:
             self.workbook = xlsxwriter.Workbook(REPORT_PATH)  # 新建Excel
             self.worksheet = self.workbook.add_worksheet("测试总况")  # 传入sheet名称
-            #self.worksheet2 = self.workbook.add_worksheet("响应时间分布")
+            self.worksheet2 = self.workbook.add_worksheet("异常信息详情")
         except Ellipsis as e:
             print("新建excel遇到错误：",e)
         #self.worksheet2 = self.workbook.add_worksheet("测试详情")
@@ -29,9 +30,6 @@ class opExcel(object):
         '''设置居中'''
         return wd.add_format({'align': 'center', 'valign': 'vcenter', 'border': num})
 
-    def get_color(self,wd,color):
-        return wd.set_font_color()
-
     def set_border_(self,wd, num=1):
         return wd.add_format({}).set_border(num)
 
@@ -40,7 +38,13 @@ class opExcel(object):
         return worksheet.write(cl, data, self.get_format_center(wd))
 
     def GenCondition(self,worksheet,project_name=None,version=None,env=None):
-        '''设置测试总况'''
+        '''
+        设置测试总况
+        :param worksheet: sheet名
+        :param project_name: 项目名
+        :param version: 版本名称
+        :param env: 环境
+        '''
 
         #设置行列宽高
         worksheet.set_column("A:A", 15)
@@ -86,22 +90,18 @@ class opExcel(object):
         self._write_center(worksheet, "D5", "失败总数", self.workbook)
         self._write_center(worksheet, "D6", "测试日期", self.workbook)
 
-        num = sql_exc("SELECT COUNT(*) FROM process_record")
-        #print(num['data'][0][0])
-        success = sql_exc("SELECT check_result FROM interface_exc_log ORDER BY id DESC LIMIT 0,%d"%num['data'][0][0])
-        #iss = sql_exc("SELECT exc_time FROM interface_exc_log ORDER BY id DESC LIMIT 0,22") #调试时间
-        #print(iss)
+        success = sql_exc("SELECT check_result FROM interface_exc_log ORDER BY id DESC LIMIT 0,%d"%self.num['data'][0][0])
         test_success = []
         test_failed = []
         for res in success['data']:
             i = '%s'%res[0]
-            if 'No' in i:
+            if 'No' in i or 'None' in i:
                 test_failed.append('fail')
             else:
                 test_success.append('pass')
         #print(test_failed,test_success)
         #数量统计
-        data1 = {"test_sum": num['data'][0][0],
+        data1 = {"test_sum": self.num['data'][0][0],
                  "test_success": test_success.count('pass'),
                  "test_failed": test_failed.count('fail'),
                  "test_date": self.time1}
@@ -118,16 +118,23 @@ class opExcel(object):
 
         self._write_center(worksheet, "E6", data1['test_date'], self.workbook)
 
-        resTime = sql_exc("SELECT response_time FROM interface_exc_log ORDER BY id DESC LIMIT 0,%d"%num['data'][0][0])
+        resTime = sql_exc("SELECT response_time FROM interface_exc_log ORDER BY id DESC LIMIT 0,%d"%self.num['data'][0][0])
         rt = []
         for resT in resTime['data']:
-            #print(resT[0])
             rt.append(float(resT[0]))#存进列表并转类型
 
         self._write_center(worksheet, "F3", "平均响应时间", self.workbook)
-        worksheet.merge_range('F4:F6', sum(rt)/num['data'][0][0], self.get_format_center(self.workbook))#平均响应时间
+        worksheet.merge_range('F4:F6', sum(rt)/int(self.num['data'][0][0]), self.get_format_center(self.workbook))#平均响应时间
         self.pie(self.workbook, worksheet)
-        self.rtPic()  #绘图
+
+        # 插入响应时间图
+        adress = self.rtPic()
+        worksheet.insert_image("H3", adress)
+        define_format_H = self.get_format(self.workbook, {'bold': True, 'font_size': 18})
+        define_format_H.set_border(1)  # 设置表格边框
+        # 设置居中和颜色
+        define_format_H.set_align("center")
+        worksheet.merge_range('G1:P1', '响应时间柱状图', define_format_H)
 
     def pie(self, workbook, worksheet):
         '''生成饼状图'''
@@ -143,29 +150,96 @@ class opExcel(object):
 
     def rtPic(self):
         '''绘制响应时间柱状图'''
-        num = sql_exc("SELECT COUNT(*) FROM process_record")
-        resTime = sql_exc("SELECT response_time FROM interface_exc_log ORDER BY id DESC LIMIT 0,%d" % num['data'][0][0])
+        resTime = sql_exc("SELECT response_time FROM interface_exc_log ORDER BY id DESC LIMIT 0,%d" % self.num['data'][0][0])
         y = []
         for resT in resTime['data']:
             y.append(float(resT[0]))  # 存进列表并转类型
 
-        module_name = sql_exc("SELECT id FROM interface_exc_log ORDER BY id DESC LIMIT 0,%d" % num['data'][0][0])
+        module_name = sql_exc("SELECT id FROM interface_exc_log ORDER BY id DESC LIMIT 0,%d" % self.num['data'][0][0])
         x = []
         for name in module_name['data']:
-            #print(name[0])
             x.append(name[0])
 
         plt.rcParams['font.sans-serif'] = ['SimHei']  # 用来正常显示中文标签
         #plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
         plt.bar(range(len(y)),y,color='rgb',tick_label = x)
-        plt.savefig('./public/report/rtime/%srTime.jpg'%time.strftime('%Y-%m-%d %H-%M-%S'))
+        plt.savefig(RES_TIME)
+        return RES_TIME
         #plt.show()
 
+
+    def AbInformation(self,worksheet):
+        '''
+        设置异常信息详情
+        :param worksheet: sheet名
+        异常定义：1、检查点失败；2、单接口响应时间超过2秒
+        '''
+        # 设置行列宽高
+        worksheet.set_column("A:A", 5)
+        worksheet.set_column("B:B", 15)
+        worksheet.set_column("C:C", 15)
+        worksheet.set_column("D:D", 20)
+        worksheet.set_column("E:E", 30)
+        worksheet.set_column("F:F", 30)
+        worksheet.set_column("G:G", 10)
+        worksheet.set_column("H:H", 30)
+        worksheet.set_column("F:F", 10)
+        worksheet.set_row(0, 40)
+        worksheet.set_row(1, 20)
+        worksheet.set_row(2, 20)
+        worksheet.set_row(3, 20)
+        worksheet.set_row(4, 20)
+
+        #初始化名称
+        self._write_center(worksheet, "A1", 'ID', self.workbook)
+        self._write_center(worksheet, "B1", 'interface_tag', self.workbook)
+        self._write_center(worksheet, "C1", '项目名称', self.workbook)
+        self._write_center(worksheet, "D1", '模块', self.workbook)
+        self._write_center(worksheet, "E1", 'url', self.workbook)
+        self._write_center(worksheet, "F1", 'body', self.workbook)
+        self._write_center(worksheet, "G1", '响应时间', self.workbook)
+        self._write_center(worksheet, "H1", '返回结果', self.workbook)
+        self._write_center(worksheet, "I1", '是否通过', self.workbook)
+
+        #查询需要的异常数据
+        req = sql_exc("SELECT b.id,b.interface_tag,b.project,b.module,b.url,b.body,b.response_time,b.response_data,b.check_status FROM interface_exc_log a INNER JOIN (SELECT * FROM interface_exc_log ORDER BY id DESC LIMIT 0,%d) b on a.id = b.id WHERE b.check_status = 0 or b.response_time > 1"% self.num['data'][0][0])
+        req_data = req['data']
+        expenses = []
+        for i in  req_data:
+            expenses.append(list(i))
+        row = 1
+        col = 0
+        #写入异常数据，并对异常进行标红加粗处理
+        for a1, b1,c1,d1,e1,f1,g1,h1,i1 in (expenses):
+            worksheet.write(row, col, a1)
+            worksheet.write(row, col + 1, b1)
+            worksheet.write(row, col + 2, c1)
+            worksheet.write(row, col + 3, d1)
+            worksheet.write(row, col + 4, e1)
+            worksheet.write(row, col + 5, f1)
+            if float(g1) > 2:
+                cell_format = self.workbook.add_format()
+                cell_format.set_font_color('red')
+                cell_format.set_bold()
+                worksheet.write(row, col + 6, g1,cell_format)
+            else:
+                worksheet.write(row, col + 6, g1)
+
+            worksheet.write(row, col + 7, h1)
+            if int(i1) != 1:
+                cell_format = self.workbook.add_format()
+                cell_format.set_font_color('red')
+                cell_format.set_bold()
+                worksheet.write(row, col + 8, i1, cell_format)
+            else:
+                worksheet.write(row, col + 8, i1)
+            row += 1
 
 
 if __name__=="__main__":
     op = opExcel()
     # 设置列行的宽高
     op.GenCondition(op.worksheet,project_name="股先生",version="3.0.0",env="内网",)
+    op.AbInformation(op.worksheet2)
     op.workbook.close()
-    op.rtPic()
+    #op.rtPic()
