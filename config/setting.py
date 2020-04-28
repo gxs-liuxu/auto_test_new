@@ -14,3 +14,5 @@ INFO_LOG_PATH = os.path.join(BASE_PATH,'log\\info.log')
 ERROR_LOG_PATH = os.path.join(BASE_PATH,'log\\error.log')
 #定义响应时间图路径
 RES_TIME = os.path.join(BASE_PATH,'public\\report\\rtime\\%srTime.jpg'%now)
+#定义十次异常统计路径
+TEN_TIMES = os.path.join(BASE_PATH,'public\\report\\tenTimes\\%srTime.jpg'%now)

@@ -13,9 +13,7 @@ def main():
 
     #生成报告
     report = opExcel()
-    report.GenCondition(report.worksheet,project_name="股先生",version="3.0.0",env="内网")
-    report.AbInformation(report.worksheet2)
-    report.workbook.close()
+    report.main()
 
 
 if __name__ == '__main__':
