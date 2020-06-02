@@ -121,6 +121,7 @@ class interface_test():
         """
         cps = checkpoint_str.split(' ')
         #判断非指定格式的断言字符串，返回False
+
         if len(cps) not in (1,3):
             return False
 

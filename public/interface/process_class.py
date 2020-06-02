@@ -371,7 +371,7 @@ class process_class():
         if begin_process_list == []:
             self.process_base_log['process_end_time'] = get_time_stamp()
             self.process_base_log['create_time'] = get_time_stamp()
-            self.process_base_log['message'] = 'Warning! 未能获取流程执行起始process_tag,  获取的begin_process_list为: ' + str(self.process_list)
+            self.process_base_log['message'] = 'Warning! 未能获取流程执行起始process_tag,  获取的begin_process_list为: ' + interface_test.set_escape_character(str(self.process_list))
             self.write_process_base_log_database()
             return False
 

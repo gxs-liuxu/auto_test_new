@@ -6,7 +6,7 @@ database_config = {
         'password': '123456'
     },
     'gxs_lan' : {
-        'host' : '192.168.10.75',
+        'host' : '192.168.10.230',
         'port' : 3306,
         'user' : 'stocksir',
         'password' : 'stocksir1704!'
