@@ -1,4 +1,3 @@
-#coding:utf-8
 import pymysql
 from .common.log import *
 
@@ -54,19 +53,36 @@ class mysql_handle():
             return_result['row_num'] = self.cur.execute(sql)
             self.conn.commit()
             return_result['data'] = self.cur.fetchall()
-            logging.info('SQL执行成功:' + sql)
+            logging.info('SQL执行成功:' + self.special_handling_spaces(sql))
             return return_result
         except pymysql.Warning as w:
             logging.warning('WARNING:' + str(w))
             return False
         except pymysql.Error as e:
-            logging.error('SQL执行失败!\n\tSQL:(' + sql + ')\n\tERROR:' + str(e))
+            logging.error('SQL执行失败!\n\tSQL:(' + self.special_handling_spaces(sql) + ')\n\tERROR:' + str(e))
             return False
 
 
+    def special_handling_spaces(self, sql):
+        '''
+        写sql日志时，对sql语句中存在的部分gbk编码进行处理
+        :param sql: 需写入日志的sql
+        :return: 编号处理后的sql
+        '''
+        return_sql = sql
+        if '\xc9' in sql:
+            return_sql += '###special_handling_spaces--xc9'
+            return_sql = ''.join(return_sql.split('\xc9'))
+        if '\xa0' in sql:
+            return_sql += '###special_handling_spaces--xa0'
+            return_sql = ''.join(return_sql.split('\xa0'))
+        return return_sql
 
 
-        
+
+
+
+
 
 
     

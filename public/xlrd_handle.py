@@ -1,4 +1,3 @@
-#coding:utf-8
 import xlrd
 from public.common.log import *
 from xlutils.copy import copy
