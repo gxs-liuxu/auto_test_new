@@ -164,9 +164,21 @@ class process_class():
                 replace_parameter_temp = i.split('=')[1]
                 if len(replace_parameter_temp) > 2 and replace_parameter_temp[0] == '|' and replace_parameter_temp[-1] == '|':
                     replace_parameter = replace_parameter_temp[1:-1]
+                else:
+                    replace_parameter = False
             else:
                 temp_output_parameter = i
                 replace_parameter = False
+
+            #特殊处理出参结果需变化的情况，<<为出参结果前置增加字符串，>>为出参结果后置增加字符串
+            pre_str = ''
+            suf_str = ''
+            if '<<' in temp_output_parameter:
+                pre_str = temp_output_parameter.split('<<')[0]
+                temp_output_parameter = temp_output_parameter.split('<<')[1]
+            if '>>' in temp_output_parameter:
+                suf_str = temp_output_parameter.split('>>')[1]
+                temp_output_parameter = temp_output_parameter.split('>>')[0]
 
             #存在多层数据结构处理
             if ":" in temp_output_parameter and temp_output_parameter[0] != ':' and temp_output_parameter[-1] != ':':
@@ -185,9 +197,9 @@ class process_class():
                     output_value = ''
 
             if replace_parameter:
-                self.global_dict[replace_parameter] = output_value
+                self.global_dict[replace_parameter] = pre_str + str(output_value) + suf_str
             else:
-                self.global_dict[output_parameter] = output_value
+                self.global_dict[output_parameter] = pre_str + str(output_value) + suf_str
 
 
 

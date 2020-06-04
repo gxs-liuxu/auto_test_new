@@ -11,10 +11,10 @@ def interface_excel_to_database(file_path, sheet_name = '接口基础数据'):
     interface_data = xh.value_to_array()
     if interface_data:
         for i in range(1, len(interface_data)):
-            sql = "INSERT INTO interface_base_data (interface_tag,project,main_module,second_module,third_module,method,url,headers,body,is_check,checkpoint,interface_status,remark,author,create_time,modify_time) VALUES (\'" +\
+            sql = "INSERT INTO interface_base_data (interface_tag,project,main_module,second_module,third_module,method,url,headers,body,is_check,checkpoint,interface_status,pre_wait_time,remark,author,create_time,modify_time) VALUES (\'" +\
                   str(interface_data[i][0]) + "\',\'" + str(interface_data[i][1]) + "\',\'" + str(interface_data[i][2]) + "\',\'" + str(interface_data[i][3]) + "\',\'" + str(interface_data[i][4]) + "\',\'" + \
                   str(interface_data[i][5]) + "\',\'" + str(interface_data[i][6]) + "\',\'" + str(interface_data[i][7]) + "\',\'" + str(interface_data[i][8]) + "\',\'" + str(interface_data[i][9]) + "\',\'" + \
-                  str(interface_data[i][10]) + "\',\'" + str(interface_data[i][11]) + "\',\'" + str(interface_data[i][12]) + "\',\'" + str(interface_data[i][13]) + "\', now(),now())"
+                  str(interface_data[i][10]) + "\',\'" + str(interface_data[i][11]) + "\',\'" + str(interface_data[i][12]) + "\',\'" + str(interface_data[i][13]) + "\',\'" + str(interface_data[i][14]) + "\', now(),now())"
             sql_exc(sql)
 
 
@@ -94,8 +94,8 @@ def database_table_to_excel(table_name, file_path):
 
 
 #指定表接口写入数据库
-interface_excel_to_database(r"C:\Users\Administrator\Desktop\interface_xh.xls")
-process_excel_to_database(r"C:\Users\Administrator\Desktop\interface_xh.xls")
+interface_excel_to_database(r"C:\Users\Administrator\Desktop\interface63.xls")
+process_excel_to_database(r"C:\Users\Administrator\Desktop\interface63.xls")
 
 #数据库数据写入excel
 #database_table_to_excel(r"F:\test\write.xls")
