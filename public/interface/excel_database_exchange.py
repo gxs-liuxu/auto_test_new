@@ -1,6 +1,15 @@
 from public.xlrd_handle import xlrd_handle
 from public.common.sql_exc import sql_exc
 
+def set_escape_character(sq_str):
+    return_str = sq_str
+    if "'" in return_str:
+        return_str = "\\\'".join(sq_str.split("'"))
+    if '"' in return_str:
+        return_str = "\\\"".join(return_str.split('"'))
+    return return_str
+
+
 def interface_excel_to_database(file_path, sheet_name = '接口基础数据'):
     '''将excel里sheet页为interface_base_data的内容写入数据库interface_base_data表中'''
     xh = xlrd_handle()
@@ -30,7 +39,7 @@ def process_excel_to_database(file_path, sheet_name = '流程记录'):
         for i in range(1, len(interface_data)):
             sql = "INSERT INTO process_record (project,task,process_tag,main_scene,second_scene,third_scene,process_status,is_exc,interface_tag,input_parameter,output_parameter,new_checkpoint,check_status,max_exc_num,max_fail_exc_num,success_jump,fail_jump,remark,author,create_time) VALUES (\'" +\
                   str(interface_data[i][0]) + "\',\'" + str(interface_data[i][1]) + "\',\'" + str(interface_data[i][2]) + "\',\'" + str(interface_data[i][3]) + "\',\'" + str(interface_data[i][4]) + "\',\'" + \
-                  str(interface_data[i][5]) + "\',\'" + str(interface_data[i][6]) + "\',\'" + str(interface_data[i][7]) + "\',\'" + str(interface_data[i][8]) + "\',\'" + str(interface_data[i][9]) + "\',\'" + \
+                  str(interface_data[i][5]) + "\',\'" + str(interface_data[i][6]) + "\',\'" + str(interface_data[i][7]) + "\',\'" + str(interface_data[i][8]) + "\',\'" + set_escape_character(str(interface_data[i][9])) + "\',\'" + \
                   str(interface_data[i][10]) + "\',\'" + str(interface_data[i][11]) + "\',\'" + str(interface_data[i][12]) + "\',\'" + str(interface_data[i][13]) + "\',\'" + str(interface_data[i][14]) + "\',\'" + \
                   str(interface_data[i][15]) + "\',\'" + str(interface_data[i][16]) + "\',\'" + str(interface_data[i][17]) + "\',\'" + str(interface_data[i][18]) + "\', now())"
             sql_exc(sql)
@@ -94,8 +103,10 @@ def database_table_to_excel(table_name, file_path):
 
 
 #指定表接口写入数据库
-interface_excel_to_database(r"C:\Users\Administrator\Desktop\interface_xh.xls")
-process_excel_to_database(r"C:\Users\Administrator\Desktop\interface_xh.xls")
+
+def to_database(path = r"C:\Users\Administrator\Desktop\interface.test.xls"):
+    interface_excel_to_database(path)
+    process_excel_to_database(path)
 
 #数据库数据写入excel
 #database_table_to_excel(r"F:\test\write.xls")

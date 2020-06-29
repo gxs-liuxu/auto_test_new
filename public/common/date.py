@@ -80,7 +80,7 @@ def set_date_time():
     while (switch):
         print("请输入计算时间的范围，格式如:2016-09-01 09:00:00; 输入#为退出本次查询")
         print("开始时间:")
-        begin_temp = raw_input()
+        begin_temp = input()
         if begin_temp == '#':
             return 0
         if ' ' in begin_temp:
@@ -99,7 +99,7 @@ def set_date_time():
     switch = 1
     while (switch):
         print("结束时间:")
-        end_temp = raw_input()
+        end_temp = input()
         if end_temp == '#':
             return 0
         if ' ' in end_temp:
@@ -140,3 +140,7 @@ def time_dif(a, b):
     except Exception as e:
         logging.info(e)
         return False
+
+# def get_millisecond_timestamp():
+#     '''获取毫秒级时间戳'''
+#     return str(round(time.time() * 1000))

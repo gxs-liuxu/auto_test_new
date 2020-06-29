@@ -31,3 +31,8 @@ admin_info = {
         'key' : '5e13f39c3e10egormjbz0xwo'
     }
 }
+
+hosts = {
+    'localhost' : "",
+    "CXTyf" : ""
+}

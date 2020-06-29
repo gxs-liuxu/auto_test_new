@@ -45,7 +45,7 @@ class requests_handle():
         elif self.method.lower() == 'get':
             try:
                 logging.info('request请求\n\t请求方法为:\t' + str(self.method) + '\n\t请求URL为:\t' + str(self.url))
-                self.result = requests.get(self.url, self.verify)
+                self.result = requests.get(self.url.encode('utf-8'), self.verify)
                 self.return_data['status'] = True
                 self.return_data['response_data'] = self.result.text
                 self.return_data['status_code'] = self.result.status_code
@@ -59,7 +59,7 @@ class requests_handle():
         elif self.method.lower() == 'post':
             try:
                 logging.info('request请求接口\n\t请求方法为:\t' + str(self.method) + '\n\t请求URL为:\t' + str(self.url) + '\n\t请求Body为:\t' + str(self.body) + '\n\t请求Headers为:\t' + str(self.headers))
-                self.result = requests.post(self.url, data = self.body, headers = self.headers, verify = self.verify)
+                self.result = requests.post(self.url.encode('utf-8'), data = self.body.encode('utf-8'), headers = self.headers, verify = self.verify)
                 self.return_data['status'] = True
                 self.return_data['response_data'] = self.result.text
                 self.return_data['status_code'] = self.result.status_code

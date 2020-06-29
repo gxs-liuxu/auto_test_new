@@ -2,6 +2,7 @@ from public.common.common import *
 from public.requests_handle import requests_handle
 from public.common.date import *
 from public.common.sql_exc import sql_exc
+from time import sleep
 
 class interface_test():
     def __init__(self):
@@ -174,6 +175,16 @@ class interface_test():
         '''
         self.interface_data['checkpoint'] = checkpoint
 
+    def pre_sleep_time(self):
+        '''
+        接口执行前时间等待
+        :return: 无
+        '''
+        try:
+            sleep(float(self.interface_data['pre_wait_time']))
+        except:
+            sleep(0)
+
     def interface_exc(self):
         '''
         接口执行并存日志
@@ -215,6 +226,9 @@ class interface_test():
         if self.interface_data['interface_status'] == 0:
             self.log_data['remark'] = "Warning! 接口状态为不可使用：" + self.interface_data['interface_tag']
             return False
+
+        #接口执行前等待
+        interface_test.pre_sleep_time(self)
 
         rh = requests_handle(self.interface_data['method'], self.interface_data['url'], self.interface_data['body'],headers)
         begin_time = get_time_stamp()
@@ -262,8 +276,8 @@ class interface_test():
         '''
 
         sql = "INSERT INTO interface_exc_log (interface_tag,`module`,method,url,headers,body,exc_time,response_time,status_code,response_data,is_check,checkpoint,check_result,check_status,remark,project,report_record) VALUES (\'" + \
-              self.log_data['interface_tag'] + "\',\'"+ self.log_data['module'] + "\',\'"+ self.log_data['method'] + "\',\'"+ self.log_data['url'] + "\',\'"+ self.log_data['headers'] + "\',\'" \
-               + str(self.log_data['body']) + "\',\'"+ str(self.log_data['exc_time']) + "\',\'"+ str(self.log_data['response_time']) + "\',\'"+ str(self.log_data['status_code']) + "\',\'"+ str(interface_test.set_escape_character(self.log_data['response_data'])) + "\',\'" \
+              self.log_data['interface_tag'] + "\',\'"+ self.log_data['module'] + "\',\'"+ self.log_data['method'] + "\',\'"+ str(interface_test.set_escape_character(self.log_data['url'])) + "\',\'"+ self.log_data['headers'] + "\',\'" \
+               + str(interface_test.set_escape_character(self.log_data['body'])) + "\',\'"+ str(self.log_data['exc_time']) + "\',\'"+ str(self.log_data['response_time']) + "\',\'"+ str(self.log_data['status_code']) + "\',\'"+ str(interface_test.set_escape_character(self.log_data['response_data'])) + "\',\'" \
                + str(self.log_data['is_check']) + "\',\'"+ str(self.log_data['checkpoint']) + "\',\""+ str(self.log_data['check_result']) + "\",\""+ str(self.log_data['check_status']) + "\",\""+ str(interface_test.set_escape_character(self.log_data['remark'])) + "\",\'" \
               + str(self.log_data['project']) + "\',\'"+ str(self.log_data['report_record']) + "\')"
 
