@@ -76,6 +76,9 @@ class mysql_handle():
         if '\xa0' in sql:
             return_sql += '###special_handling_spaces--xa0'
             return_sql = ''.join(return_sql.split('\xa0'))
+        if '\U0001f604' in sql:
+            return_sql += '###special_handling_spaces--U0001f604'
+            return_sql = ''.join(return_sql.split('\U0001f604'))
         return return_sql
 
 

@@ -2,6 +2,7 @@ from public.interface.interface_class import interface_test
 from public.common.date import get_date_time_str
 from public.common.sql_exc import sql_exc
 from public.common.date import *
+from public.interface.parameter_change import parameter_change
 
 class process_class():
 
@@ -16,6 +17,7 @@ class process_class():
         self.sql_result = False
         self.process_log_data = {}  #流程执行日志
         self.process_base_log = {}  #流程基础日志
+
 
 
     def set_begin_time(self):
@@ -121,6 +123,36 @@ class process_class():
         self.process_data['task'] = sql_row_result[16]
 
 
+    # def inputparameter_to_dict(self):
+    #     '''
+    #     根据需求的入参和全局可使用的参数，构建可替换的入参，dict
+    #     :return: 已替换完成的需要入参，dict
+    #     '''
+    #
+    #     return_inputparameter_dict = {}
+    #     temp_list = self.process_data['input_parameter'].split(";")
+    #     for i in temp_list:
+    #         single_parameter = i.split("=")
+    #         if len(single_parameter) == 1:
+    #             if single_parameter[0] in self.global_dict.keys():
+    #                 return_inputparameter_dict[single_parameter[0]] = self.global_dict[single_parameter[0]]
+    #             else:
+    #                 self.process_log_data['remark'] += "Error! 参数替换格式错误，全局可替换参数不存在：" + str(single_parameter[0]) + ' ! '
+    #         elif len(single_parameter) == 2:
+    #             #参数名与全局使用的参数名不一致处理时，需替换的全局参数名添加前后加上|来转换; 否则将等式做赋值处理
+    #             if len(str(single_parameter[1])) > 2 and str(single_parameter[1])[0] == '|' and str(single_parameter[1])[-1] == '|':
+    #                 if str(single_parameter[1])[1:-1] in self.global_dict.keys():
+    #                     return_inputparameter_dict[single_parameter[0]] = self.global_dict[str(single_parameter[1])[1:-1]]
+    #                 else:
+    #                     self.process_log_data['remark'] += "Error! 参数替换格式错误，全局可替换参数不存在：" + str(single_parameter[1])[1:-1] + ' ! '
+    #             else:
+    #                 return_inputparameter_dict[single_parameter[0]] = single_parameter[1]
+    #         else:
+    #             self.process_log_data['remark'] += "Error! 参数替换格式错误，期望替换内容为：" + str(i)
+    #
+    #     return return_inputparameter_dict
+
+
     def inputparameter_to_dict(self):
         '''
         根据需求的入参和全局可使用的参数，构建可替换的入参，dict
@@ -137,18 +169,46 @@ class process_class():
                 else:
                     self.process_log_data['remark'] += "Error! 参数替换格式错误，全局可替换参数不存在：" + str(single_parameter[0]) + ' ! '
             elif len(single_parameter) == 2:
-                #参数名与全局使用的参数名不一致处理时，需替换的全局参数名添加前后加上|来转换; 否则将等式做赋值处理
-                if len(str(single_parameter[1])) > 2 and str(single_parameter[1])[0] == '|' and str(single_parameter[1])[-1] == '|':
-                    if str(single_parameter[1])[1:-1] in self.global_dict.keys():
-                        return_inputparameter_dict[single_parameter[0]] = self.global_dict[str(single_parameter[1])[1:-1]]
-                    else:
-                        self.process_log_data['remark'] += "Error! 参数替换格式错误，全局可替换参数不存在：" + str(single_parameter[1])[1:-1] + ' ! '
+                if '|' in str(single_parameter[1]):
+                    return_data_replace = self.data_replace(str(single_parameter[1]))
+                    if return_data_replace is not False:
+                        try:
+                            temp_str = self.data_replace(str(single_parameter[1]))
+
+                            eval_result = eval(str(temp_str))
+                            #部分接口参数为字典
+                            if type(eval_result) == dict:
+                                eval_result = '"'.join(str(eval_result).split("'"))
+
+                            print(eval_result)
+                            return_inputparameter_dict[single_parameter[0]] = eval_result
+                        except:
+                            self.process_log_data['remark'] += "Error! 参数替换格式错误，替换参数字符串执行失败：" + self.data_replace(str(single_parameter[1])) + ' ! '
+
                 else:
                     return_inputparameter_dict[single_parameter[0]] = single_parameter[1]
+
             else:
                 self.process_log_data['remark'] += "Error! 参数替换格式错误，期望替换内容为：" + str(i)
 
         return return_inputparameter_dict
+
+
+    def data_replace(self, replace_str):
+        replace_list = replace_str.split("|")
+        if len(replace_list) % 2 == 1:
+            replace_num = len(replace_list) // 2
+            try:
+                for i in range(replace_num):
+                    replace_list[2 * i + 1] = "\'" + str(self.global_dict[replace_list[2 * i + 1]]) + "\'"
+            except:
+                self.process_log_data['remark'] += "Error! 参数替换格式错误，全局可替换参数不存在：" + str(replace_list[2 * i + 1]) + ' ! '
+                return False
+
+            return ''.join(replace_list)
+        else:
+            self.process_log_data['remark'] += "Error! ：参数替换表达式错误" + str(replace_str) + ' ! '
+            return False
 
 
     def outputparameter_to_dict(self):
@@ -476,8 +536,6 @@ class process_class():
         self.process_base_log['create_time'] = get_time_stamp()
         self.process_base_log['message'] = 'Finish! 流程执行完成！'
         self.write_process_base_log_database()
-
-
 
 
 

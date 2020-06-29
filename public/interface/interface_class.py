@@ -20,7 +20,7 @@ class interface_test():
         :param interface_tag: interface_tag数据库需唯一
         :return: sql执行结果
         '''
-        sql = "SELECT interface_tag,main_module,second_module,third_module,method,url,body,headers,is_check,checkpoint,interface_status,project,pre_wait_time from interface_base_data WHERE interface_tag = \'" + str(interface_tag) + "\'"
+        sql = "SELECT interface_tag,main_module,second_module,third_module,method,url,body,headers,is_check,checkpoint,interface_status,project from interface_base_data WHERE interface_tag = \'" + str(interface_tag) + "\'"
         return sql_exc(sql)
 
 
@@ -42,7 +42,6 @@ class interface_test():
         self.interface_data['checkpoint'] = sql_row_result[9]
         self.interface_data['interface_status'] = sql_row_result[10]
         self.interface_data['project'] = sql_row_result[11]
-        self.interface_data['pre_wait_time'] = sql_row_result[12]
 
 
     def response_data_to_json(self):
@@ -276,8 +275,8 @@ class interface_test():
         '''
 
         sql = "INSERT INTO interface_exc_log (interface_tag,`module`,method,url,headers,body,exc_time,response_time,status_code,response_data,is_check,checkpoint,check_result,check_status,remark,project,report_record) VALUES (\'" + \
-              self.log_data['interface_tag'] + "\',\'"+ self.log_data['module'] + "\',\'"+ self.log_data['method'] + "\',\'"+ self.log_data['url'] + "\',\'"+ self.log_data['headers'] + "\',\'" \
-               + str(self.log_data['body']) + "\',\'"+ str(self.log_data['exc_time']) + "\',\'"+ str(self.log_data['response_time']) + "\',\'"+ str(self.log_data['status_code']) + "\',\'"+ str(interface_test.set_escape_character(self.log_data['response_data'])) + "\',\'" \
+              self.log_data['interface_tag'] + "\',\'"+ self.log_data['module'] + "\',\'"+ self.log_data['method'] + "\',\'"+ str(interface_test.set_escape_character(self.log_data['url'])) + "\',\'"+ self.log_data['headers'] + "\',\'" \
+               + str(interface_test.set_escape_character(self.log_data['body'])) + "\',\'"+ str(self.log_data['exc_time']) + "\',\'"+ str(self.log_data['response_time']) + "\',\'"+ str(self.log_data['status_code']) + "\',\'"+ str(interface_test.set_escape_character(self.log_data['response_data'])) + "\',\'" \
                + str(self.log_data['is_check']) + "\',\'"+ str(self.log_data['checkpoint']) + "\',\""+ str(self.log_data['check_result']) + "\",\""+ str(self.log_data['check_status']) + "\",\""+ str(interface_test.set_escape_character(self.log_data['remark'])) + "\",\'" \
               + str(self.log_data['project']) + "\',\'"+ str(self.log_data['report_record']) + "\')"
 
