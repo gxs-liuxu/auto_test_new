@@ -23,7 +23,7 @@
       <file leaf-file-name="sql_exc.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/common/sql_exc.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
+            <state relative-caret-position="440">
               <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
@@ -46,7 +46,7 @@
         <entry file="file://$PROJECT_DIR$/test.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="308">
-              <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+              <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -106,7 +106,7 @@
         <entry file="file://$PROJECT_DIR$/public/interface/process_class.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="7678">
-              <caret line="352" column="55" lean-forward="true" selection-start-line="352" selection-start-column="55" selection-end-line="352" selection-end-column="55" />
+              <caret line="352" column="55" lean-forward="false" selection-start-line="352" selection-start-column="55" selection-end-line="352" selection-end-column="55" />
               <folding />
             </state>
           </provider>
@@ -218,7 +218,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -262,6 +261,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -829,7 +829,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/common/sql_exc.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
+        <state relative-caret-position="440">
           <caret line="20" column="0" lean-forward="false" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
@@ -850,7 +850,7 @@
     <entry file="file://$PROJECT_DIR$/public/interface/process_class.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="7678">
-          <caret line="352" column="55" lean-forward="true" selection-start-line="352" selection-start-column="55" selection-end-line="352" selection-end-column="55" />
+          <caret line="352" column="55" lean-forward="false" selection-start-line="352" selection-start-column="55" selection-end-line="352" selection-end-column="55" />
           <folding />
         </state>
       </provider>
@@ -858,7 +858,7 @@
     <entry file="file://$PROJECT_DIR$/test.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="308">
-          <caret line="14" column="0" lean-forward="true" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
+          <caret line="14" column="0" lean-forward="false" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding />
         </state>
       </provider>
