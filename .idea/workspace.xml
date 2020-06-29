@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="214b4768-c623-49b4-aaa4-9a8ff3c6a3ef" name="默认的" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config/config.py" afterPath="$PROJECT_DIR$/config/config.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/log/error.log" afterPath="$PROJECT_DIR$/log/error.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/log/info.log" afterPath="$PROJECT_DIR$/log/info.log" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/interface/interface_class.py" afterPath="$PROJECT_DIR$/public/interface/interface_class.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/interface/process_class.py" afterPath="$PROJECT_DIR$/public/interface/process_class.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test.py" afterPath="$PROJECT_DIR$/test.py" />
-    </list>
+    <list default="true" id="214b4768-c623-49b4-aaa4-9a8ff3c6a3ef" name="默认的" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -45,9 +37,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="528">
               <caret line="24" column="32" lean-forward="false" selection-start-line="24" selection-start-column="32" selection-end-line="24" selection-end-column="32" />
-              <folding>
-                <marker date="1591063961406" expanded="true" signature="466:766" ph="..." />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -105,21 +95,9 @@
       <file leaf-file-name="interface_class.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/interface/interface_class.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4752">
+            <state relative-caret-position="4774">
               <caret line="220" column="9" lean-forward="false" selection-start-line="220" selection-start-column="9" selection-end-line="220" selection-end-column="9" />
-              <folding>
-                <marker date="1591063961441" expanded="true" signature="4141:5412" ph="..." />
-                <marker date="1591063961441" expanded="true" signature="4647:5412" ph="..." />
-                <marker date="1591063961441" expanded="true" signature="5445:5758" ph="..." />
-                <marker date="1591063961441" expanded="true" signature="5797:5919" ph="..." />
-                <marker date="1591063961441" expanded="true" signature="5962:6188" ph="..." />
-                <marker date="1591063961441" expanded="true" signature="6218:9042" ph="..." />
-                <marker date="1591063961441" expanded="true" signature="8385:8962" ph="..." />
-                <marker date="1591063961441" expanded="true" signature="8626:8665" ph="..." />
-                <marker date="1591063961441" expanded="true" signature="8707:8962" ph="..." />
-                <marker date="1591063961441" expanded="true" signature="9099:9291" ph="..." />
-                <marker date="1591063961441" expanded="true" signature="9340:10603" ph="..." />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -127,14 +105,9 @@
       <file leaf-file-name="process_class.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/interface/process_class.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
+            <state relative-caret-position="7678">
               <caret line="352" column="55" lean-forward="true" selection-start-line="352" selection-start-column="55" selection-end-line="352" selection-end-column="55" />
-              <folding>
-                <marker date="1591063961443" expanded="true" signature="2064:2127" ph="SELECT proce... process_record" />
-                <marker date="1591063961443" expanded="true" signature="8028:8313" ph="SELECT proje... process_record" />
-                <marker date="1591063961443" expanded="true" signature="10405:11454" ph="INSERT INTO process_exc_log... " />
-                <marker date="1591063961443" expanded="true" signature="11674:12327" ph="INSERT INTO process_base_log... " />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -142,14 +115,10 @@
       <file leaf-file-name="excel_database_exchange.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/interface/excel_database_exchange.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="547">
+            <state relative-caret-position="2090">
               <caret line="95" column="7" lean-forward="false" selection-start-line="95" selection-start-column="7" selection-end-line="95" selection-end-column="7" />
               <folding>
                 <element signature="e#0#42#0" expanded="true" />
-                <marker date="1591063977676" expanded="true" signature="489:1299" ph="INSERT INTO interface_base_data... " />
-                <marker date="1591063977676" expanded="true" signature="1717:2807" ph="INSERT INTO process_record... " />
-                <marker date="1591063977676" expanded="true" signature="2935:3095" ph="select GROUP... COLUMNS" />
-                <marker date="1591063977676" expanded="true" signature="4860:4920" ph="..." />
               </folding>
             </state>
           </provider>
@@ -248,6 +217,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -292,7 +262,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -531,8 +500,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14658849" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14635417" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="调试" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32998884" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32924107" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -540,7 +510,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="运行" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.61160713" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="运行" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.61160713" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -584,12 +554,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1496">
           <caret line="68" column="18" lean-forward="true" selection-start-line="68" selection-start-column="18" selection-end-line="68" selection-end-column="18" />
-          <folding>
-            <marker date="1591063961443" expanded="true" signature="2064:2127" ph="SELECT proce... process_record" />
-            <marker date="1591063961443" expanded="true" signature="8028:8313" ph="SELECT proje... process_record" />
-            <marker date="1591063961443" expanded="true" signature="10405:11454" ph="INSERT INTO process_exc_log... " />
-            <marker date="1591063961443" expanded="true" signature="11674:12327" ph="INSERT INTO process_base_log... " />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -826,29 +791,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="528">
           <caret line="24" column="32" lean-forward="false" selection-start-line="24" selection-start-column="32" selection-end-line="24" selection-end-column="32" />
-          <folding>
-            <marker date="1591063961406" expanded="true" signature="466:766" ph="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/interface/interface_class.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4752">
+        <state relative-caret-position="4774">
           <caret line="220" column="9" lean-forward="false" selection-start-line="220" selection-start-column="9" selection-end-line="220" selection-end-column="9" />
-          <folding>
-            <marker date="1591063961441" expanded="true" signature="4141:5412" ph="..." />
-            <marker date="1591063961441" expanded="true" signature="4647:5412" ph="..." />
-            <marker date="1591063961441" expanded="true" signature="5445:5758" ph="..." />
-            <marker date="1591063961441" expanded="true" signature="5797:5919" ph="..." />
-            <marker date="1591063961441" expanded="true" signature="5962:6188" ph="..." />
-            <marker date="1591063961441" expanded="true" signature="6218:9042" ph="..." />
-            <marker date="1591063961441" expanded="true" signature="8385:8962" ph="..." />
-            <marker date="1591063961441" expanded="true" signature="8626:8665" ph="..." />
-            <marker date="1591063961441" expanded="true" signature="8707:8962" ph="..." />
-            <marker date="1591063961441" expanded="true" signature="9099:9291" ph="..." />
-            <marker date="1591063961441" expanded="true" signature="9340:10603" ph="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -888,28 +839,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/interface/excel_database_exchange.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="547">
+        <state relative-caret-position="2090">
           <caret line="95" column="7" lean-forward="false" selection-start-line="95" selection-start-column="7" selection-end-line="95" selection-end-column="7" />
           <folding>
             <element signature="e#0#42#0" expanded="true" />
-            <marker date="1591063977676" expanded="true" signature="489:1299" ph="INSERT INTO interface_base_data... " />
-            <marker date="1591063977676" expanded="true" signature="1717:2807" ph="INSERT INTO process_record... " />
-            <marker date="1591063977676" expanded="true" signature="2935:3095" ph="select GROUP... COLUMNS" />
-            <marker date="1591063977676" expanded="true" signature="4860:4920" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/interface/process_class.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
+        <state relative-caret-position="7678">
           <caret line="352" column="55" lean-forward="true" selection-start-line="352" selection-start-column="55" selection-end-line="352" selection-end-column="55" />
-          <folding>
-            <marker date="1591063961443" expanded="true" signature="2064:2127" ph="SELECT proce... process_record" />
-            <marker date="1591063961443" expanded="true" signature="8028:8313" ph="SELECT proje... process_record" />
-            <marker date="1591063961443" expanded="true" signature="10405:11454" ph="INSERT INTO process_exc_log... " />
-            <marker date="1591063961443" expanded="true" signature="11674:12327" ph="INSERT INTO process_base_log... " />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
