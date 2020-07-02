@@ -169,22 +169,31 @@ class process_class():
                 else:
                     self.process_log_data['remark'] += "Error! 参数替换格式错误，全局可替换参数不存在：" + str(single_parameter[0]) + ' ! '
             elif len(single_parameter) == 2:
+
                 if '|' in str(single_parameter[1]):
                     return_data_replace = self.data_replace(str(single_parameter[1]))
                     if return_data_replace is not False:
                         try:
                             temp_str = self.data_replace(str(single_parameter[1]))
-
                             eval_result = eval(str(temp_str))
-                            #部分接口参数为字典
+                            #部分接口参数为字典,需要key为双引号
                             if type(eval_result) == dict:
                                 eval_result = '"'.join(str(eval_result).split("'"))
 
-                            print(eval_result)
                             return_inputparameter_dict[single_parameter[0]] = eval_result
                         except:
-                            self.process_log_data['remark'] += "Error! 参数替换格式错误，替换参数字符串执行失败：" + self.data_replace(str(single_parameter[1])) + ' ! '
+                            self.process_log_data['remark'] += "Error! 参数替换格式错误1，替换参数字符串执行失败：" + self.data_replace(str(single_parameter[1])) + ' ! '
+                elif '|' not in str(single_parameter[1]) and 'parameter_change' in str(single_parameter[1]):
+                    temp_str = single_parameter[1]
+                    try:
+                        eval_result = eval(str(temp_str))
+                        # 部分接口参数为字典
+                        if type(eval_result) == dict:
+                            eval_result = '"'.join(str(eval_result).split("'"))
 
+                        return_inputparameter_dict[single_parameter[0]] = eval_result
+                    except:
+                        self.process_log_data['remark'] += "Error! 参数替换格式错误2，替换参数字符串执行失败：" + self.data_replace(str(single_parameter[1])) + ' ! '
                 else:
                     return_inputparameter_dict[single_parameter[0]] = single_parameter[1]
 
@@ -200,7 +209,9 @@ class process_class():
             replace_num = len(replace_list) // 2
             try:
                 for i in range(replace_num):
-                    replace_list[2 * i + 1] = "\'" + str(self.global_dict[replace_list[2 * i + 1]]) + "\'"
+                    #整体处理字符串引号，内部统一使用双引号
+                    replace_list[2 * i + 1] = "\'" + '\"'.join(str(self.global_dict[replace_list[2 * i + 1]]).split("'")) + "\'"
+
             except:
                 self.process_log_data['remark'] += "Error! 参数替换格式错误，全局可替换参数不存在：" + str(replace_list[2 * i + 1]) + ' ! '
                 return False
@@ -279,6 +290,7 @@ class process_class():
         '''
         if self.process_data['new_checkpoint'] != '':
             interface_test.set_checkpoint(self, self.process_data['new_checkpoint'])
+            interface_test.set_is_check(self, 1)
 
 
     def replace_get_url(self, replace_dict):
@@ -296,7 +308,6 @@ class process_class():
             url_replace_kv = {}
             for k in url_replace.split('&'):
                 temp_k_v = k.split('=')
-                #print(temp_k_v)
                 if len(temp_k_v) == 2:
                     url_replace_kv[temp_k_v[0]] = temp_k_v[1]
 
@@ -454,6 +465,7 @@ class process_class():
                 process_record_row = self.get_process_record_row_data(process_tag)
                 #流程数据转为dict格式, 若获取流程数据失败则退出当前流程
                 if process_record_row['data'] == ():
+                    self.process_base_log['process_end_time'] = get_time_stamp()
                     self.process_base_log['create_time'] = get_time_stamp()
                     self.process_base_log['message'] = 'Error! 获取流程数据失败，退出当前流程: ' + str(process_tag) + ', 起始流程为： ' + str(n)
                     self.write_process_base_log_database()
