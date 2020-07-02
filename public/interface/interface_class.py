@@ -3,6 +3,7 @@ from public.requests_handle import requests_handle
 from public.common.date import *
 from public.common.sql_exc import sql_exc
 from time import sleep
+from public.interface.parameter_change import parameter_change
 
 class interface_test():
     def __init__(self):
@@ -75,19 +76,14 @@ class interface_test():
             #获取断言执行字符串
             try:
                 check_result = interface_test.checkpointstr_to_excstr(cps.strip())
-            # except:
-            #     #字符串转换异常
-            #     check_result = 'None'
-            #     check_result_list.append('None')
-            #     self.log_data['remark'] += '断言转换为可执行字符串异常,断言为：' + str(cps)
-            #
-            # try:
                 if check_result is False:
                     check_result_list.append('False')
+                    self.log_data['remark'] += 'Error：断言为：' + str(cps) + ' 长度不正确，可能为空格间隔问题！'
                 elif eval(check_result):
                     check_result_list.append('Yes')
                 else:
                     check_result_list.append('No')
+                    self.log_data['remark'] += 'Warning：断言为：' + str(cps) + ' 断言失败！'
             except:
                 check_result_list.append('None')
                 self.log_data['remark'] += '断言异常,断言为：' + str(cps)
@@ -130,23 +126,65 @@ class interface_test():
         if len(cps) == 1:
             return "\'" + cps[0] + "\' in self.log_data[\'response_data\']"
         else:
-            #构建检查点
-            if (':' in cps[0]) and str(cps[0])[0] != ':' and str(cps[0])[-1] != ':':
-                format_variable = interface_test.format_variable_str(cps[0])
+            #仅支持单个方法结果判定格式
+            function_temp = ''
+            if 'parameter_change' in cps[0]:
+                temp_list = cps[0].split('(')
+                cps_temp = temp_list[1][0:-1]
+                function_temp = temp_list[0]
             else:
-                format_variable = "response_data_dict[\'" + str(cps[0]) + "\']"
+                cps_temp = cps[0]
 
-            #判断表达式类型
-            if(cps[1] == '='):
-                return format_variable + " == " + str(cps[2])
-            elif(cps[1] in ('>', '<', '!=', '>=', '<=')):
-                return format_variable + str(cps[1]) + str(cps[2])
-            elif(cps[1] == 'in'):
-                return format_variable + " in " + str(cps[2])
-            elif(cps[1] == 'notin'):
-                return format_variable + " not in " + str(cps[2])
+
+
+            # 构建检查点
+            if (':' in cps_temp) and str(cps_temp)[0] != ':' and str(cps_temp)[-1] != ':':
+                format_variable = interface_test.format_variable_str(cps_temp)
             else:
-                return False
+                format_variable = "response_data_dict[\'" + str(cps_temp) + "\']"
+
+            # 判断表达式类型
+            if function_temp != '':
+                if (cps[1] == '='):
+                    return  function_temp + "(" + format_variable + ") == " + str(cps[2])
+                elif (cps[1] in ('>', '<', '!=', '>=', '<=')):
+                    return function_temp + "(" + format_variable + ")" + str(cps[1]) + str(cps[2])
+                elif (cps[1] == 'in'):
+                    return function_temp + "(" + format_variable + ") in " + str(cps[2])
+                elif (cps[1] == 'notin'):
+                    return function_temp + "(" + format_variable + ") not in " + str(cps[2])
+                else:
+                    return False
+            else:
+                if (cps[1] == '='):
+                    return  format_variable + " == " + str(cps[2])
+                elif (cps[1] in ('>', '<', '!=', '>=', '<=')):
+                    return format_variable + str(cps[1]) + str(cps[2])
+                elif (cps[1] == 'in'):
+                    return format_variable + " in " + str(cps[2])
+                elif (cps[1] == 'notin'):
+                    return format_variable + " not in " + str(cps[2])
+                else:
+                    return False
+
+
+            # #构建检查点
+            # if (':' in cps[0]) and str(cps[0])[0] != ':' and str(cps[0])[-1] != ':':
+            #     format_variable = interface_test.format_variable_str(cps[0])
+            # else:
+            #     format_variable = "response_data_dict[\'" + str(cps[0]) + "\']"
+            #
+            # #判断表达式类型
+            # if(cps[1] == '='):
+            #     return format_variable + " == " + str(cps[2])
+            # elif(cps[1] in ('>', '<', '!=', '>=', '<=')):
+            #     return format_variable + str(cps[1]) + str(cps[2])
+            # elif(cps[1] == 'in'):
+            #     return format_variable + " in " + str(cps[2])
+            # elif(cps[1] == 'notin'):
+            #     return format_variable + " not in " + str(cps[2])
+            # else:
+            #     return False
 
     def set_check_status(self):
         '''
@@ -159,6 +197,7 @@ class interface_test():
             if cr != 'Yes':
                 check_status = 0
                 break
+
         self.log_data['check_status'] = check_status
 
     def set_is_check(self, is_check):
@@ -217,9 +256,6 @@ class interface_test():
 
         if self.interface_data['headers']:
             headers = eval(self.interface_data['headers'])
-            # headers = {
-            #     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-            # }
         else:
             headers = self.interface_data['headers']
 
@@ -228,7 +264,7 @@ class interface_test():
             return False
 
         #接口执行前等待
-        interface_test.pre_sleep_time(self)
+        #interface_test.pre_sleep_time(self)
 
         rh = requests_handle(self.interface_data['method'], self.interface_data['url'], self.interface_data['body'],headers)
         begin_time = get_time_stamp()
@@ -247,7 +283,6 @@ class interface_test():
 
 
             #断言判断
-            #print(self.log_data)
             if self.log_data['is_check']:
                 interface_test.check_checkpoint(self)
                 if self.log_data['check_result']:
@@ -278,7 +313,7 @@ class interface_test():
         sql = "INSERT INTO interface_exc_log (interface_tag,`module`,method,url,headers,body,exc_time,response_time,status_code,response_data,is_check,checkpoint,check_result,check_status,remark,project,report_record) VALUES (\'" + \
               self.log_data['interface_tag'] + "\',\'"+ self.log_data['module'] + "\',\'"+ self.log_data['method'] + "\',\'"+ str(interface_test.set_escape_character(self.log_data['url'])) + "\',\'"+ self.log_data['headers'] + "\',\'" \
                + str(interface_test.set_escape_character(self.log_data['body'])) + "\',\'"+ str(self.log_data['exc_time']) + "\',\'"+ str(self.log_data['response_time']) + "\',\'"+ str(self.log_data['status_code']) + "\',\'"+ str(interface_test.set_escape_character(self.log_data['response_data'])) + "\',\'" \
-               + str(self.log_data['is_check']) + "\',\'"+ str(self.log_data['checkpoint']) + "\',\""+ str(self.log_data['check_result']) + "\",\""+ str(self.log_data['check_status']) + "\",\""+ str(interface_test.set_escape_character(self.log_data['remark'])) + "\",\'" \
+               + str(self.log_data['is_check']) + "\',\'"+ str(interface_test.set_escape_character(self.log_data['checkpoint'])) + "\',\""+ str(self.log_data['check_result']) + "\",\""+ str(self.log_data['check_status']) + "\",\""+ str(interface_test.set_escape_character(self.log_data['remark'])) + "\",\'" \
               + str(self.log_data['project']) + "\',\'"+ str(self.log_data['report_record']) + "\')"
 
         sql_exc(sql)
