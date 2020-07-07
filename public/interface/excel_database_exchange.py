@@ -37,11 +37,11 @@ def process_excel_to_database(file_path, sheet_name = '流程记录'):
     interface_data = xh.value_to_array()
     if interface_data:
         for i in range(1, len(interface_data)):
-            sql = "INSERT INTO process_record (project,task,process_tag,main_scene,second_scene,third_scene,process_status,is_exc,interface_tag,input_parameter,output_parameter,new_checkpoint,check_status,max_exc_num,max_fail_exc_num,success_jump,fail_jump,remark,author,create_time) VALUES (\'" +\
+            sql = "INSERT INTO process_record (project,task,process_tag,main_scene,second_scene,third_scene,process_status,is_exc,interface_tag,headers_set,input_parameter,output_parameter,cookies_set,new_checkpoint,check_status,max_exc_num,max_fail_exc_num,success_jump,fail_jump,remark,author,create_time) VALUES (\'" +\
                   str(interface_data[i][0]) + "\',\'" + str(interface_data[i][1]) + "\',\'" + str(interface_data[i][2]) + "\',\'" + str(interface_data[i][3]) + "\',\'" + str(interface_data[i][4]) + "\',\'" + \
-                  str(interface_data[i][5]) + "\',\'" + str(interface_data[i][6]) + "\',\'" + str(interface_data[i][7]) + "\',\'" + str(interface_data[i][8]) + "\',\'" + set_escape_character(str(interface_data[i][9])) + "\',\'" + \
-                  str(interface_data[i][10]) + "\',\'" + str(interface_data[i][11]) + "\',\'" + str(interface_data[i][12]) + "\',\'" + str(interface_data[i][13]) + "\',\'" + str(interface_data[i][14]) + "\',\'" + \
-                  str(interface_data[i][15]) + "\',\'" + str(interface_data[i][16]) + "\',\'" + str(interface_data[i][17]) + "\',\'" + str(interface_data[i][18]) + "\', now())"
+                  str(interface_data[i][5]) + "\',\'" + str(interface_data[i][6]) + "\',\'" + str(interface_data[i][7]) + "\',\'" + str(interface_data[i][8]) + "\',\'" + str(interface_data[i][9]) + "\',\'" + \
+                  set_escape_character(str(interface_data[i][10])) + "\',\'" + str(interface_data[i][11]) + "\',\'" + str(interface_data[i][12]) + "\',\'" + str(interface_data[i][13]) + "\',\'" + str(interface_data[i][14]) + "\',\'" + \
+                  str(interface_data[i][15]) + "\',\'" + str(interface_data[i][16]) + "\',\'" + str(interface_data[i][17]) + "\',\'" + str(interface_data[i][18]) + "\',\'" + str(interface_data[i][19]) + "\',\'" + str(interface_data[i][20]) + "\', now())"
             sql_exc(sql)
 
 

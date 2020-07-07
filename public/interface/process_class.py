@@ -8,7 +8,9 @@ class process_class():
 
     def __init__(self):
         interface_test.__init__(self)
-        self.global_dict = {}       #流程全局数据字典，控制出参、入参
+        self.global_dict = {
+            "cookies":{}
+        }       #流程全局数据字典，控制出参、入参、cookie
         self.global_Preset = 1      #前置设置全局数据字典状态，默认为1
         self.process_list = []      #测试整体流程list
         self.project = ''      #测试项目名
@@ -121,36 +123,9 @@ class process_class():
         self.process_data['fail_jump'] = sql_row_result[14]
         self.process_data['is_exc'] = sql_row_result[15]
         self.process_data['task'] = sql_row_result[16]
+        self.process_data['headers_set'] = sql_row_result[17]
+        self.process_data['cookies_set'] = sql_row_result[18]
 
-
-    # def inputparameter_to_dict(self):
-    #     '''
-    #     根据需求的入参和全局可使用的参数，构建可替换的入参，dict
-    #     :return: 已替换完成的需要入参，dict
-    #     '''
-    #
-    #     return_inputparameter_dict = {}
-    #     temp_list = self.process_data['input_parameter'].split(";")
-    #     for i in temp_list:
-    #         single_parameter = i.split("=")
-    #         if len(single_parameter) == 1:
-    #             if single_parameter[0] in self.global_dict.keys():
-    #                 return_inputparameter_dict[single_parameter[0]] = self.global_dict[single_parameter[0]]
-    #             else:
-    #                 self.process_log_data['remark'] += "Error! 参数替换格式错误，全局可替换参数不存在：" + str(single_parameter[0]) + ' ! '
-    #         elif len(single_parameter) == 2:
-    #             #参数名与全局使用的参数名不一致处理时，需替换的全局参数名添加前后加上|来转换; 否则将等式做赋值处理
-    #             if len(str(single_parameter[1])) > 2 and str(single_parameter[1])[0] == '|' and str(single_parameter[1])[-1] == '|':
-    #                 if str(single_parameter[1])[1:-1] in self.global_dict.keys():
-    #                     return_inputparameter_dict[single_parameter[0]] = self.global_dict[str(single_parameter[1])[1:-1]]
-    #                 else:
-    #                     self.process_log_data['remark'] += "Error! 参数替换格式错误，全局可替换参数不存在：" + str(single_parameter[1])[1:-1] + ' ! '
-    #             else:
-    #                 return_inputparameter_dict[single_parameter[0]] = single_parameter[1]
-    #         else:
-    #             self.process_log_data['remark'] += "Error! 参数替换格式错误，期望替换内容为：" + str(i)
-    #
-    #     return return_inputparameter_dict
 
 
     def inputparameter_to_dict(self):
@@ -280,7 +255,7 @@ class process_class():
         :param process_tag: process_tag，数据库中需唯一
         :return: 查询数据
         '''
-        sql = "SELECT project,process_tag,main_scene,second_scene,third_scene,process_status,interface_tag,input_parameter,output_parameter,new_checkpoint,check_status,max_exc_num,max_fail_exc_num,success_jump,fail_jump,is_exc,task from process_record WHERE process_tag = \'" + str(process_tag) + "\'"
+        sql = "SELECT project,process_tag,main_scene,second_scene,third_scene,process_status,interface_tag,input_parameter,output_parameter,new_checkpoint,check_status,max_exc_num,max_fail_exc_num,success_jump,fail_jump,is_exc,task,headers_set,cookies_set from process_record WHERE process_tag = \'" + str(process_tag) + "\'"
         return sql_exc(sql)
 
 
@@ -422,6 +397,33 @@ class process_class():
         self.process_log_data['jump_process_tag'] = ''
         self.process_log_data['remark'] = ''
 
+    def set_headers(self):
+        '''headers设置'''
+        if self.process_data['headers_set'] != '':
+            headers_dict_update = {}
+            temp_list = str(self.process_data['headers_set']).split(';')
+            for i in temp_list:
+                if i == 'cookies':
+                    headers_dict_update.update(self.global_dict['cookies'])
+                elif "=" in i:
+                    temp_i_list = i.split('=')
+                    if len(temp_i_list) == 2:
+                        temp_index = interface_test.format_variable_str(temp_i_list[1], 'self.global_dict')
+                        try:
+                            headers_dict_update[temp_i_list[0]] = eval(str(temp_index))
+                        except:
+                            self.process_log_data['remark'] += 'Error! 设置headers数据失败，赋值表达式执行异常：' + str(i)
+                    else:
+                        self.process_log_data['remark'] += 'Error! 设置headers数据失败，赋值表达式异常：' + str(i)
+                else:
+                    self.process_log_data['remark'] += 'Error! 设置headers数据失败，格式异常，非cookies或赋值表达式：' + str(i)
+
+            interface_test.replace_headers(self, headers_dict_update)
+
+
+
+
+
 
     def run(self):
         '''执行'''
@@ -496,6 +498,10 @@ class process_class():
                     self.sql_row_result = interface_test.row_to_interface_data(self, interface_sql_row['data'][0])
                     #检查点替换
                     self.change_checkpoint()
+                    #headers替换
+                    self.set_headers()
+
+
                     #入参替换
                     if self.process_data['input_parameter'] != '':
                         inputparameter_dict = self.inputparameter_to_dict()
@@ -524,14 +530,26 @@ class process_class():
                             if fail_num == max_fail_exc_num:
                                 break
 
+
                     self.process_log_data['interface_exc_success_num'] = success_num
                     self.process_log_data['interface_exc_fail_num'] = fail_num
                     self.process_log_data['interface_exc_time'] = self.log_data['exc_time']
 
-                    # 判断接口执行状态码和检查状态，提取出参，流程跳转判断
+                    # 判断接口执行状态码和检查状态，提取出参和cookie设置，流程跳转判断
                     if self.log_data['status_code'] == 200 and self.log_data['check_status'] == 1:
+
+                        #提取出参
                         if self.process_data['output_parameter'] != '':
                             self.outputparameter_to_dict()
+
+                        #cookie设置
+                        if self.process_data['cookies_set'] == 1:
+                            self.global_dict['cookies'] = self.log_data['cookies']
+                        elif self.process_data['cookies_set'] == 2:
+                            self.global_dict['cookies'].update(self.log_data['cookies'])
+                        elif self.process_data['cookies_set'] == 3:
+                            self.global_dict['cookies'] = {}
+
                         process_tag = self.process_data['success_jump']
                         self.process_log_data['exc_status'] = 1
                         self.process_log_data['jump_process_tag'] = self.process_data['success_jump']
@@ -541,6 +559,7 @@ class process_class():
                         self.process_log_data['jump_process_tag'] = self.process_data['fail_jump']
                         self.process_log_data['remark'] += 'Error! 流程执行失败' + str(self.process_data['process_tag'])
 
+                    print(self.global_dict)
                     self.write_process_exc_log_database()
 
 
