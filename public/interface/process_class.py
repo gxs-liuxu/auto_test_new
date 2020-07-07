@@ -559,7 +559,6 @@ class process_class():
                         self.process_log_data['jump_process_tag'] = self.process_data['fail_jump']
                         self.process_log_data['remark'] += 'Error! 流程执行失败' + str(self.process_data['process_tag'])
 
-                    print(self.global_dict)
                     self.write_process_exc_log_database()
 
 

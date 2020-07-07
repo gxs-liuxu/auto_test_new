@@ -252,7 +252,7 @@ class interface_test():
         self.log_data['headers'] = self.interface_data['headers']
         self.log_data['module'] = self.interface_data['main_module']
         self.log_data['response_data'] = ''
-        self.log_data['cookies'] = ''
+        self.log_data['cookies'] = {}
         self.log_data['response_status'] = ''
         self.log_data['status_code'] = ''
         self.log_data['check_result'] = ''
@@ -324,6 +324,7 @@ class interface_test():
         :param database: 指定数据库
         :return: 数据库写入结果
         '''
+
         sql = "INSERT INTO interface_exc_log (interface_tag,`module`,method,url,headers,body,exc_time,response_time,status_code,response_data,is_check,checkpoint,check_result,check_status,remark,project,report_record,cookies) VALUES (\'" + \
               self.log_data['interface_tag'] + "\',\'"+ self.log_data['module'] + "\',\'"+ self.log_data['method'] + "\',\'"+ str(interface_test.set_escape_character(self.log_data['url'])) + "\',\'"+ str(interface_test.set_escape_character(self.log_data['headers'])) + "\',\'" \
                + str(interface_test.set_escape_character(self.log_data['body'])) + "\',\'"+ str(self.log_data['exc_time']) + "\',\'"+ str(self.log_data['response_time']) + "\',\'"+ str(self.log_data['status_code']) + "\',\'"+ str(interface_test.set_escape_character(self.log_data['response_data'])) + "\',\'" \

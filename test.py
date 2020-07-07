@@ -8,7 +8,7 @@ def main():
     a = process_class()
     #a.set_test_process(['APP数据中心']) #list内使用单引号隔开，不要使用双引号
     # a.set_test_project("股先生APP")
-    a.set_test_task("轮询")
+    a.set_test_task("行情接口")
     dict_set = {"appcode":"5c6bb51a113c8szji5nb6cur"}
     a.set_global_dict(dict_set)
     a.run()
@@ -16,7 +16,7 @@ def main():
 
 
 if __name__ == '__main__':
-    #to_database(r"C:\Users\Administrator\Desktop\interface.test.xls")
+    #to_database(r"C:\Users\Administrator\Desktop\interface.xls")
     main()
 
 
