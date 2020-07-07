@@ -147,6 +147,7 @@ class interface_test():
                 if (cps[1] == '='):
                     return  function_temp + "(" + format_variable + ") == " + str(cps[2])
                 elif (cps[1] in ('>', '<', '!=', '>=', '<=')):
+                    print(function_temp + "(" + format_variable + ")" + str(cps[1]) + str(cps[2]))
                     return function_temp + "(" + format_variable + ")" + str(cps[1]) + str(cps[2])
                 elif (cps[1] == 'in'):
                     return function_temp + "(" + format_variable + ") in " + str(cps[2])
@@ -223,6 +224,17 @@ class interface_test():
         except:
             sleep(0)
 
+    def replace_headers(self, updata_headers_dict):
+        '''特殊headers替换
+        :param updata_headers_dict: 构建成功的可替换headers的dict
+        '''
+
+        if type(updata_headers_dict) == dict:
+            self.interface_data['headers'] = eval(self.interface_data['headers'])
+            self.interface_data['headers'].update(updata_headers_dict)
+        else:
+            self.log_data['remark'] = 'Error! 替换headers数据失败，替换内容非字典类型：' + str(updata_headers_dict)
+
     def interface_exc(self):
         '''
         接口执行并存日志
@@ -239,6 +251,7 @@ class interface_test():
         self.log_data['headers'] = self.interface_data['headers']
         self.log_data['module'] = self.interface_data['main_module']
         self.log_data['response_data'] = ''
+        self.log_data['cookies'] = ''
         self.log_data['response_status'] = ''
         self.log_data['status_code'] = ''
         self.log_data['check_result'] = ''
@@ -254,7 +267,7 @@ class interface_test():
         self.log_data['is_check'] = self.interface_data['is_check']
 
         if self.interface_data['headers']:
-            headers = eval(self.interface_data['headers'])
+            headers = eval(str(self.interface_data['headers']))
         else:
             headers = self.interface_data['headers']
 
@@ -279,6 +292,7 @@ class interface_test():
             self.log_data['response_data'] = self.rq_result['response_data']
             self.log_data['status_code'] = self.rq_result['status_code']
             self.log_data['response_time'] = self.rq_result['elapsed_time']
+            self.log_data['cookies'] = self.rq_result['cookies']
 
 
             #断言判断
@@ -293,12 +307,13 @@ class interface_test():
 
     @staticmethod
     def set_escape_character(sq_str):
+        sq_str = str(sq_str)
         if "'" in sq_str:
             return "\\\'".join(sq_str.split("'"))
         if '"' in sq_str:
             return "\\\"".join(sq_str.split('"'))
-        else:
-            return sq_str
+
+        return sq_str
 
     def write_interface_exc_log_database(self):
         '''
@@ -308,12 +323,11 @@ class interface_test():
         :param database: 指定数据库
         :return: 数据库写入结果
         '''
-
-        sql = "INSERT INTO interface_exc_log (interface_tag,`module`,method,url,headers,body,exc_time,response_time,status_code,response_data,is_check,checkpoint,check_result,check_status,remark,project,report_record) VALUES (\'" + \
-              self.log_data['interface_tag'] + "\',\'"+ self.log_data['module'] + "\',\'"+ self.log_data['method'] + "\',\'"+ str(interface_test.set_escape_character(self.log_data['url'])) + "\',\'"+ self.log_data['headers'] + "\',\'" \
+        sql = "INSERT INTO interface_exc_log (interface_tag,`module`,method,url,headers,body,exc_time,response_time,status_code,response_data,is_check,checkpoint,check_result,check_status,remark,project,report_record,cookies) VALUES (\'" + \
+              self.log_data['interface_tag'] + "\',\'"+ self.log_data['module'] + "\',\'"+ self.log_data['method'] + "\',\'"+ str(interface_test.set_escape_character(self.log_data['url'])) + "\',\'"+ str(interface_test.set_escape_character(self.log_data['headers'])) + "\',\'" \
                + str(interface_test.set_escape_character(self.log_data['body'])) + "\',\'"+ str(self.log_data['exc_time']) + "\',\'"+ str(self.log_data['response_time']) + "\',\'"+ str(self.log_data['status_code']) + "\',\'"+ str(interface_test.set_escape_character(self.log_data['response_data'])) + "\',\'" \
-               + str(self.log_data['is_check']) + "\',\'"+ str(interface_test.set_escape_character(self.log_data['checkpoint'])) + "\',\""+ str(self.log_data['check_result']) + "\",\""+ str(self.log_data['check_status']) + "\",\""+ str(interface_test.set_escape_character(self.log_data['remark'])) + "\",\'" \
-              + str(self.log_data['project']) + "\',\'"+ str(self.log_data['report_record']) + "\')"
+               + str(self.log_data['is_check']) + "\',\'"+ str(interface_test.set_escape_character(self.log_data['checkpoint'])) + "\',\""+ str(self.log_data['check_result']) + "\",\""+ str(self.log_data['check_status']) + "\",\"" + str(interface_test.set_escape_character(self.log_data['remark'])) + "\",\'" \
+              + str(self.log_data['project']) + "\',\'"+ str(self.log_data['report_record']) + "\',\'" + str(interface_test.set_escape_character(self.log_data['cookies'])) + "\')"
 
         sql_exc(sql)
 

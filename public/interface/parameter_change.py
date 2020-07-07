@@ -28,6 +28,21 @@ class parameter_change():
         return member_id_str
 
     @staticmethod
+    def ybwzxq_date_replace(ybwz_date):
+        '''研报文章详情字符串拼接'''
+        date_list = ybwz_date.split(' ')
+        temp_date = date_list[0].split('-')
+        return '/' + temp_date[0] + '/' + temp_date[1] + temp_date[2] + '/'
+
+    @staticmethod
+    def get_chance_list_len(chance_list_str):
+        '''获取机会list的len'''
+        if type(chance_list_str) == list:
+            return len(chance_list_str)
+        else:
+            return 0
+
+    @staticmethod
     def str_to_float(temp_str):
         '''字符串转float'''
         return float(temp_str)
