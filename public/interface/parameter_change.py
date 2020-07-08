@@ -1,4 +1,6 @@
 import time
+import random
+from config.config import *
 
 class parameter_change():
 
@@ -51,3 +53,15 @@ class parameter_change():
     def str_to_int(temp_str):
         '''字符串转int'''
         return int(temp_str)
+
+    @staticmethod
+    def crm_cookies_set(cookies):
+        try:
+            cookies = eval(cookies)
+            kv_str = ''
+            for key in cookies.keys():
+                kv_str += key + '=' + cookies[key] + ';'
+
+            return kv_str[:-1]
+        except:
+            print('error!')

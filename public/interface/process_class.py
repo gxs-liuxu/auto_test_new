@@ -127,7 +127,6 @@ class process_class():
         self.process_data['cookies_set'] = sql_row_result[18]
 
 
-
     def inputparameter_to_dict(self):
         '''
         根据需求的入参和全局可使用的参数，构建可替换的入参，dict
@@ -144,34 +143,7 @@ class process_class():
                 else:
                     self.process_log_data['remark'] += "Error! 参数替换格式错误，全局可替换参数不存在：" + str(single_parameter[0]) + ' ! '
             elif len(single_parameter) == 2:
-
-                if '|' in str(single_parameter[1]):
-                    return_data_replace = self.data_replace(str(single_parameter[1]))
-                    if return_data_replace is not False:
-                        try:
-                            temp_str = self.data_replace(str(single_parameter[1]))
-                            eval_result = eval(str(temp_str))
-                            #部分接口参数为字典,需要key为双引号
-                            if type(eval_result) == dict:
-                                eval_result = '"'.join(str(eval_result).split("'"))
-
-                            return_inputparameter_dict[single_parameter[0]] = eval_result
-                        except:
-                            self.process_log_data['remark'] += "Error! 参数替换格式错误1，替换参数字符串执行失败：" + self.data_replace(str(single_parameter[1])) + ' ! '
-                elif '|' not in str(single_parameter[1]) and 'parameter_change' in str(single_parameter[1]):
-                    temp_str = single_parameter[1]
-                    try:
-                        eval_result = eval(str(temp_str))
-                        # 部分接口参数为字典
-                        if type(eval_result) == dict:
-                            eval_result = '"'.join(str(eval_result).split("'"))
-
-                        return_inputparameter_dict[single_parameter[0]] = eval_result
-                    except:
-                        self.process_log_data['remark'] += "Error! 参数替换格式错误2，替换参数字符串执行失败：" + self.data_replace(str(single_parameter[1])) + ' ! '
-                else:
-                    return_inputparameter_dict[single_parameter[0]] = single_parameter[1]
-
+                self.expression_process(single_parameter, return_inputparameter_dict)
             else:
                 self.process_log_data['remark'] += "Error! 参数替换格式错误，期望替换内容为：" + str(i)
 
@@ -179,6 +151,11 @@ class process_class():
 
 
     def data_replace(self, replace_str):
+        '''
+        数据替换，将保存在||之间的参数替换为全局保存的对应数值
+        :param replace_str: 数据替换表达式，支持同时替换多个参数
+        :return:
+        '''
         replace_list = replace_str.split("|")
         if len(replace_list) % 2 == 1:
             replace_num = len(replace_list) // 2
@@ -197,11 +174,45 @@ class process_class():
             return False
 
 
+    def expression_process(self, single_parameter, return_inputparameter_dict):
+        '''
+        参数替换表达式
+        :param single_parameter: list,single_parameter[0]为参数名，single_parameter[1]为替换的表达式
+        :param return_inputparameter_dict:替换结果保存的字典
+        :return:
+        '''
+        if '|' in str(single_parameter[1]):
+            return_data_replace = self.data_replace(str(single_parameter[1]))
+            if return_data_replace is not False:
+                try:
+                    temp_str = self.data_replace(str(single_parameter[1]))
+                    eval_result = eval(str(temp_str))
+                    # 部分接口参数为字典,需要key为双引号
+                    if type(eval_result) in (dict, list):
+                        eval_result = '"'.join(str(eval_result).split("'"))
+
+                    return_inputparameter_dict[single_parameter[0]] = eval_result
+                except:
+                    self.process_log_data['remark'] += "Error! 参数替换格式错误1，替换参数字符串执行失败：" + self.data_replace(str(single_parameter[1])) + ' ! '
+        elif '|' not in str(single_parameter[1]) and 'parameter_change' in str(single_parameter[1]):
+            temp_str = single_parameter[1]
+            try:
+                eval_result = eval(str(temp_str))
+                # 部分接口参数为字典,需要key为双引号
+                if type(eval_result) in (dict, list):
+                    eval_result = '"'.join(str(eval_result).split("'"))
+
+                return_inputparameter_dict[single_parameter[0]] = eval_result
+            except:
+                self.process_log_data['remark'] += "Error! 参数替换格式错误2，替换参数字符串执行失败：" + self.data_replace(str(single_parameter[1])) + ' ! '
+        else:
+            return_inputparameter_dict[single_parameter[0]] = single_parameter[1]
+
+
     def outputparameter_to_dict(self):
         '''
         将出参数据存入流程全局参数中，global_dict
         '''
-
 
         temp_list = self.process_data['output_parameter'].split(";")
         for i in temp_list:
@@ -401,25 +412,20 @@ class process_class():
         '''headers设置'''
         if self.process_data['headers_set'] != '':
             headers_dict_update = {}
-            temp_list = str(self.process_data['headers_set']).split(';')
+            temp_list = self.process_data['headers_set'].split(";")
             for i in temp_list:
-                if i == 'cookies':
-                    headers_dict_update.update(self.global_dict['cookies'])
-                elif "=" in i:
-                    temp_i_list = i.split('=')
-                    if len(temp_i_list) == 2:
-                        temp_index = interface_test.format_variable_str(temp_i_list[1], 'self.global_dict')
-                        try:
-                            headers_dict_update[temp_i_list[0]] = eval(str(temp_index))
-                        except:
-                            self.process_log_data['remark'] += 'Error! 设置headers数据失败，赋值表达式执行异常：' + str(i)
+                single_parameter = i.split("=")
+                if len(single_parameter) == 1:
+                    if single_parameter[0] in self.global_dict.keys():
+                        headers_dict_update[single_parameter[0]] = self.global_dict[single_parameter[0]]
                     else:
-                        self.process_log_data['remark'] += 'Error! 设置headers数据失败，赋值表达式异常：' + str(i)
+                        self.process_log_data['remark'] += "Error! 设置headers数据失败，全局可替换参数不存在：" + str(single_parameter[0]) + ' ! '
+                elif len(single_parameter) == 2:
+                    self.expression_process(single_parameter, headers_dict_update)
                 else:
-                    self.process_log_data['remark'] += 'Error! 设置headers数据失败，格式异常，非cookies或赋值表达式：' + str(i)
+                    self.process_log_data['remark'] += "Error! 设置headers数据失败，格式异常：" + str(i)
 
             interface_test.replace_headers(self, headers_dict_update)
-
 
 
 

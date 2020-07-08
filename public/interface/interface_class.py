@@ -231,7 +231,10 @@ class interface_test():
         '''
 
         if type(updata_headers_dict) == dict:
-            self.interface_data['headers'] = eval(self.interface_data['headers'])
+            try:
+                self.interface_data['headers'] = eval(self.interface_data['headers'])
+            except:
+                self.log_data['remark'] = 'Error! 替换headers数据失败，原header格式执行后非字典类型：' + str(self.interface_data['headers'])
             self.interface_data['headers'].update(updata_headers_dict)
         else:
             self.log_data['remark'] = 'Error! 替换headers数据失败，替换内容非字典类型：' + str(updata_headers_dict)
